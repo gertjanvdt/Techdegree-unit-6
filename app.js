@@ -1,7 +1,9 @@
 // ***** DECLARED VARIABLES *****
+const overlay = document.getElementById('overlay');
 const qwerty = document.getElementById('qwerty');
 const phrase = document.getElementById('phrase');
 const letterButton = document.querySelectorAll('button');
+const ul = document.getElementById('phrase').firstElementChild;
 let missed = 0;
 
 const phrases = [
@@ -14,7 +16,14 @@ const phrases = [
 
 // ***** FUNCTIONS *****
 
-// Step 5
+// Function to start the game or restart the game after win or lose
+function startGame() {
+    overlay.style.display = 'none'; 
+    const pickedPhraseArray = getRandomPhraseAsArray(phrases);
+    addPhraseToDisplay(pickedPhraseArray);
+}
+
+// Step 5 - Function to pick one of the phrases at random
 function getRandomPhraseAsArray(arr) {
     let pickedPhrase = '';
     // Set random number to pick phrase
@@ -31,20 +40,16 @@ function getRandomPhraseAsArray(arr) {
     return pickedPhraseArray;
 }
 
-const pickedPhraseArray = getRandomPhraseAsArray(phrases);
-
-// Step 6
+// Step 6 - Convert array of picked phrase into individual li elements inside ul
 function addPhraseToDisplay (arr) {
-    // Get ul element.
-    const ul = document.getElementById('phrase').firstElementChild;
 
-    // Loop through picked phrase array (letters)
+    // Loop through picked phrase array and set as li elements (letters)
     for (let i = 0; i < arr.length; i++ ) {
         const li = document.createElement('li');
         li.innerHTML = arr[i];
         ul.appendChild(li);
 
-        // If character is not a space add class
+        // If character is not a space add class of letter
         if (li.textContent !== ' ' ) {
             li.className = 'letter';
         }
@@ -76,7 +81,7 @@ function checkWin () {
     const totalShownLetters = showLetters.length;
     const totalLetters = letters.length;
 
-    if (missed >= 5) {
+    if (missed > 4) {
         winOrLose('lose');
     } else if (totalShownLetters === totalLetters) {
         winOrLose('win');
@@ -92,22 +97,52 @@ function winOrLose (result) {
     overlay.className = result;
     overlayTitle.innerHTML = `YOU ${result} THE GAME`;
     startButton.innerHTML = 'Start New Game'
+
+    // Reset the game after win or lose
+    resetGame();
 }
 
+// Function to replace hart when guess is incorrect.
+function replaceHart () {
+    const harts = document.getElementsByTagName('img');
 
-// *****  START GAME  *****
+    for (let i = 0; i < harts.length; i++) {
+        if (harts[i].parentElement.className === 'tries') {
+            harts[i].src = 'images/lostHeart.png';
+            harts[i].parentElement.className = 'used';
+            break;   
+        }
+    }
+}
 
-const overlay = document.getElementById('overlay');
-overlay.addEventListener('click', (e) => {
-    
+// Function to reset the game
+function resetGame() {
+    const harts = document.getElementsByTagName('img');
+    const chosenLetters = document.querySelectorAll('.chosen');
+    missed = 0;
+
+    for (let i = 0; i < harts.length; i++) {
+            harts[i].src = 'images/liveHeart.png'; 
+            harts[i].parentElement.className = 'tries';
+    }
+
+    while (ul.hasChildNodes()) {
+        ul.removeChild(ul.firstChild);
+    }
+
+    for (let i = 0; i < chosenLetters.length; i++) {
+        chosenLetters[i].className = ' ';
+    } 
+}
+
+// *****  RUN THE GAME  *****
+overlay.addEventListener('click', (e) => { 
     if (event.target.className === 'btn__reset') {
-        overlay.style.display = 'none';
+        startGame();
     }
 });
 
-addPhraseToDisplay(pickedPhraseArray);
-
-// Step 8, litlen for letter click and 
+// Step 8, listlen for letter click 
 qwerty.addEventListener('click', (e) => {  
     if (event.target = letterButton) {
     const letter = event.target;
@@ -116,20 +151,12 @@ qwerty.addEventListener('click', (e) => {
     const letterFound = checkLetter(letter.textContent)
   
     // Step 9 
-    // Increase missed variable if letter not result
+    // Increase missed variable and remove hart if letter not in sentence
         if (letterFound === null) {
             missed++
+            replaceHart();
         }
     }
-    // Step 10
+    // Step 10 to check if the player has wone or lost upon clicking a letter
     checkWin();
 });
-
-
-
-
-
-
-
-
-
