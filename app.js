@@ -1,5 +1,6 @@
 // ***** DECLARED VARIABLES *****
 const overlay = document.getElementById('overlay');
+const startButton = document.querySelector('.btn__reset');
 const qwerty = document.getElementById('qwerty');
 const phrase = document.getElementById('phrase');
 const letterButton = document.querySelectorAll('button');
@@ -11,7 +12,9 @@ const phrases = [
     "beauty and the beast",
     "the little mermaid",
     "the jungle book",
-    "lady and the tramp"
+    "lady and the tramp",
+    "pocahontas",
+    "the aristocats"
 ]
 
 // ***** FUNCTIONS *****
@@ -27,7 +30,7 @@ function startGame() {
 function getRandomPhraseAsArray(arr) {
     let pickedPhrase = '';
     // Set random number to pick phrase
-    const pickPhraseNumber = Math.floor(Math.random() * 5 );
+    const pickPhraseNumber = Math.floor(Math.random() * 7 );
 
     // Loop through phrase array to get phrase that is equal to random number
     for (let i = 0; i < arr.length; i++) {
@@ -95,7 +98,7 @@ function winOrLose (result) {
 
     overlay.style.display = '';
     overlay.className = result;
-    overlayTitle.innerHTML = `YOU ${result} THE GAME`;
+    overlayTitle.innerHTML = `you ${result} the game`;
     startButton.innerHTML = 'Start New Game'
 
     // Reset the game after win or lose
@@ -136,10 +139,8 @@ function resetGame() {
 }
 
 // *****  RUN THE GAME  *****
-overlay.addEventListener('click', (e) => { 
-    if (event.target.className === 'btn__reset') {
+startButton.addEventListener('click', (e) => { 
         startGame();
-    }
 });
 
 // Step 8, listlen for letter click 
