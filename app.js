@@ -143,9 +143,9 @@ startButton.addEventListener('click', (e) => {
         startGame();
 });
 
-// Step 8, listlen for letter click 
+// Step 8, listen for letter click 
 qwerty.addEventListener('click', (e) => {  
-    if (event.target = letterButton) {
+    if (e.target.tagName === 'BUTTON') {
     const letter = event.target;
     letter.className = 'chosen';
     
