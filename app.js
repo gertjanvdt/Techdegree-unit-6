@@ -55,6 +55,8 @@ function addPhraseToDisplay (arr) {
         // If character is not a space add class of letter
         if (li.textContent !== ' ' ) {
             li.className = 'letter';
+        } else {
+            li.className = 'space';
         }
     }
 }
@@ -135,6 +137,7 @@ function resetGame() {
 
     for (let i = 0; i < chosenLetters.length; i++) {
         chosenLetters[i].className = ' ';
+        chosenLetters[i].disabled = false;
     } 
 }
 
