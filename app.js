@@ -148,6 +148,7 @@ qwerty.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') {
     const letter = event.target;
     letter.className = 'chosen';
+    letter.disabled = true;
     
     const letterFound = checkLetter(letter.textContent)
   
